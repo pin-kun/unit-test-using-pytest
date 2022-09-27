@@ -15,8 +15,18 @@ Here I used pytest for unit testing.
  
  ##### What am I using for testing?
   - I have tested using Django Model Tests `TestCase`
-  - Tested using `Pytest`
+  - Using `Pytest` for Python test
+  - Using `mixer` library for random values
+    - **mixer**:
+      - It will create a student model for us
+      - It will fill up the variables with random_values in the models for us
+      - We can also give 'static value' to the model variables 
   - Using `hypothesis` library with `pytest` which gives us lots of benefits and easeness while testing
+    - **hypothesis**:
+      - With the use of `mixer` and `hypothesis`, we can check different scinarios that we would not have thought of before.
+      - We can use @given() decorator to fill up the model variables with random_values (using `mixer.blend()`)
+
+
 
 #
  
