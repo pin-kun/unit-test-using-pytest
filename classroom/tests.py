@@ -38,11 +38,11 @@ class TestStudentModel:
         assert str(student_result) == "Tom"
 
     # check username - slug field
-    @given(st.characters())
-    def test_slugify(self, slug_name):
-        student1 = mixer.blend(Student, username=slug_name)
-        student_result = Student.objects.last() # getting the last student
-        assert len(student_result.username) == len(slug_name)
+    # @given(st.characters())
+    # def test_slugify(self, slug_name):
+    #     student1 = mixer.blend(Student, username=slug_name)
+    #     student_result = Student.objects.last() # getting the last student
+    #     assert len(student_result.username) == len(slug_name)
 
     # Check the get_grade() function -  for FAIL case
     @given(st.floats(min_value=0, max_value=40)) # will return a value
