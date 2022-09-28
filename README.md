@@ -42,4 +42,13 @@ Here I used pytest for unit testing.
         - url: http://127.0.0.1:8000/admin/
         - username: **admin**
         - password: **admin**
-    
+
+#
+ 
+ 
+##### Some useful pytest command
+Note: After installing requirements.txt file
+- To run or test the function which contains some specific words then use this command
+    - Ex: `pytest -k student_create` or `pytest -k student_list`
+    - Above command will only check the test function which contains ‘**student_create**’ or ‘**student_list**’. 
+    - It can be any where **“first, last or in middle”**
