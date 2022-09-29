@@ -123,7 +123,7 @@ class TestStudentListAPIVIews(TestCase):
         assert response.status_code == 204
         assert Student.objects.count() == 0 # if count=0 then student deleted
 
-# Test class for classroom using APIView
+# Test class for classroom model using APIView
 class TestClassroomAPIView(TestCase):
     #setUp() function
     # To call the url, we need something called "apiclient"
