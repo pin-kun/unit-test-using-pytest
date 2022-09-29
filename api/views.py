@@ -1,8 +1,12 @@
+from urllib import response
 from django.shortcuts import render
 from rest_framework.generics import ListAPIView, CreateAPIView, RetrieveAPIView, DestroyAPIView
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
 
-from classroom.models import Student
-from .serializers import StudentSerializer
+from classroom.models import Student, Classroom
+from .serializers import StudentSerializer, ClassroomSerializer
 
 # Create your views here.
 class StudentListAPIView(ListAPIView):
@@ -24,3 +28,22 @@ class StudentDestroyAPIView(DestroyAPIView):
     serializer_class = StudentSerializer
     model = Student
     queryset = Student.objects.all()
+
+## Classroom model's API View
+class ClassroomNumberAPIView(APIView):
+    serializer_class = ClassroomSerializer
+    model =  Classroom
+    queryset = Classroom.objects.all()
+
+    def get(self, request, *args, **kwargs):
+        url_number = self.kwargs.get("student_capacity")
+        print('url number:', url_number)
+
+        classroom_qs = Classroom.objects.filter(student_capacity__gte = url_number)
+        print("classroom qs--> ", classroom_qs)
+
+        number_of_classes = classroom_qs.count()
+        
+        serializer = ClassroomSerializer(classroom_qs, many=True)
+        return Response({"classroom_data": serializer.data, "number_of_classes": number_of_classes}, status=status.HTTP_202_ACCEPTED)
+

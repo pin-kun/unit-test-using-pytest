@@ -1,7 +1,7 @@
 from unittest import TestCase
 from urllib import response
 import pytest
-from classroom.models import Student
+from classroom.models import Student, Classroom
 
 # To create a student and fill up with random values, we are using mixer here
 from mixer.backend.django import mixer
@@ -20,8 +20,11 @@ from rest_framework.reverse import reverse # to use the reverse "name" provided 
 # while testing models, we create student object and test the models
 # But in views.py, we are directly connected to urls.py
 # So we call the urls.py and try to check whether we getting data or not
+
+# Test class for student
 class TestStudentListAPIVIews(TestCase):
     #setUp() function
+    # To call the url, we need something called "apiclient"
     def setUp(self):
         self.myapiclient = APIClient() # "myapiclient" => can be given any variable name
         print('self.myapiclient-->: ', self.myapiclient)
@@ -120,4 +123,24 @@ class TestStudentListAPIVIews(TestCase):
         assert response.status_code == 204
         assert Student.objects.count() == 0 # if count=0 then student deleted
 
-        
+# Test class for classroom using APIView
+class TestClassroomAPIView(TestCase):
+    #setUp() function
+    # To call the url, we need something called "apiclient"
+    def setUp(self):
+        self.myapiclient = APIClient() # "myapiclient" => can be given any variable name
+        print('self.myapiclient-->: ', self.myapiclient)
+
+    def test_classroom_qs_works(self):
+        classroom = mixer.blend(Classroom, student_capacity=20)
+        classroom2 = mixer.blend(Classroom, student_capacity=28)
+
+        # url reverse - using name from urls.py
+        url = reverse("classroom_qs_api", kwargs={"student_capacity": 29})
+
+        response = self.client.get(url)
+        print('classroom data --> ', response.data)
+
+        assert response.status_code == 202
+        assert response.data["classroom_data"] != []
+        assert response.data["number_of_classes"] == 2
