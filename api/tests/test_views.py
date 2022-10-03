@@ -76,7 +76,7 @@ class TestStudentListAPIVIews(TestCase):
         print('post response -->', response.data)
         assert response.json != None
         assert response.status_code == 201
-        assert Student.objects.count() == 3
+        assert Student.objects.count() == 1
 
     # retrieve ('GET') method
     def test_student_detail_works(self): 
@@ -128,8 +128,18 @@ class TestClassroomAPIView(TestCase):
     #setUp() function
     # To call the url, we need something called "apiclient"
     def setUp(self):
-        self.myapiclient = APIClient() # "myapiclient" => can be given any variable name
-        print('self.myapiclient-->: ', self.myapiclient)
+        self.client = APIClient() # "client" => can be given any variable name
+        print('self.client-->: ', self.client)
+
+        from rest_framework.authtoken.models import Token
+        from django.contrib.auth.models import User
+        self.our_user = User.objects.create(username="testuser", password="abcde")
+        self.token = Token.objects.create(user=self.our_user)
+        print('token -->', self.token.key)
+
+        # Token will be appended to the self.client
+        self.client.credentials(HTTP_AUTHORIZATION="Token " + self.token.key)
+
 
     def test_classroom_qs_works(self):
         classroom = mixer.blend(Classroom, student_capacity=20)
@@ -138,7 +148,7 @@ class TestClassroomAPIView(TestCase):
         # url reverse - using name from urls.py
         url = reverse("classroom_qs_api", kwargs={"student_capacity": 29})
 
-        response = self.client.get(url)
+        response = self.client.get(url,)
         print('classroom data --> ', response.data)
 
         assert response.status_code == 202
